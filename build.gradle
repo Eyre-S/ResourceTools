@@ -1,5 +1,27 @@
+buildscript {
+    repositories {
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
+    }
+}
+
 plugins {
     id 'java'
+}
+
+apply plugin:'java'
+apply plugin: 'eclipse'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'application'
+mainClassName='test.ResourcesTest'
+shadowJar {
+    baseName = 'jarName'
+    classifier = null
+    version = '1.0.0'
 }
 
 group 'cc.sukazyo'
