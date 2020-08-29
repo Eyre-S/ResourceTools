@@ -16,7 +16,7 @@ public class ResFile {
 		JarEntry jarTemp = null;
 		File dirTemp = null;
 		resourcesPackage = resPack;
-		this.path = path;
+		this.path = path.substring(resPack.getResRootPath().length() - 1);
 		if (resourcesPackage.isDirPack()) {
 			dirTemp = new File(resourcesPackage.getRoot().getPath() + "/" + path);
 			if (!dirTemp.isFile())
@@ -45,7 +45,7 @@ public class ResFile {
 		resourcesPackage = resPack;
 		dirFile = node;
 		// TODO Path is not relative
-		path = node.getPath();
+		path = resPack.pathRelativization(node.getAbsolutePath());
 	}
 	
 	protected ResFile (ResourcesPackage resPack, JarEntry node) {
@@ -53,7 +53,7 @@ public class ResFile {
 		resourcesPackage = resPack;
 		dirFile = null;
 		// TODO Path is not relative
-		path = node.getName();
+		path = node.getName().substring(resPack.getResRootPath().length() - 1);
 	}
 	
 	public String getPath () {

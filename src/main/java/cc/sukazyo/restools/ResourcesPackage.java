@@ -12,7 +12,7 @@ public class ResourcesPackage {
 	
 	public static final String PACKID = "suk-restools";
 	public static final String VERSION = "0.1-dev";
-	public static final int BUILD = 2;
+	public static final int BUILD = 3;
 	
 	private final ProjectType type;
 	
@@ -55,6 +55,10 @@ public class ResourcesPackage {
 	
 	public File getRoot () {
 		return root;
+	}
+	
+	public String getResRootPath() {
+		return resRoot;
 	}
 	
 	public boolean isDirPack () {
@@ -112,11 +116,23 @@ public class ResourcesPackage {
 	}
 	
 	private String cutPath (String path) {
-		Matcher matcher = Pattern.compile("^[\\/\\\\]?(\\S+?)[\\/\\\\]?$").matcher(path);
+		Matcher matcher = Pattern.compile("^[/\\\\]?(.+?)[/\\\\]?$").matcher(path);
 		if (matcher.find()) {
 			path = matcher.group(1) + "/";
 		}
 		return path;
+	}
+	
+	public String pathRelativization (String absolutePath) {
+		if (this.isDirPack()) {
+			String assRoot = this.root.getAbsolutePath() + File.separator + resRoot.substring(0, resRoot.length()-1);
+//			System.out.println(absolutePath + "|" + assRoot);
+			if (!absolutePath.substring(0, assRoot.length()).equals(assRoot))
+				return absolutePath;
+			return absolutePath.substring(assRoot.length()).replaceAll("\\\\", "/");
+		} else {
+			return null;
+		}
 	}
 	
 }

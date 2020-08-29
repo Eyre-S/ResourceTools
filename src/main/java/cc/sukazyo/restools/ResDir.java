@@ -20,7 +20,7 @@ public class ResDir {
 		JarEntry jarTemp = null;
 		File dirTemp = null;
 		resourcesPackage = resPack;
-		this.path = path;
+		this.path = path.substring(resPack.getResRootPath().length() - 1);
 		if (resourcesPackage.isDirPack()) {
 			dirTemp = new File(resourcesPackage.getRoot().getPath() + "/" + path);
 			if (!dirTemp.isDirectory())
@@ -48,8 +48,7 @@ public class ResDir {
 		jarEntry = null;
 		resourcesPackage = resPack;
 		dir = node;
-		// TODO Path is not relative
-		path = node.getPath();
+		path = resPack.pathRelativization(node.getAbsolutePath());
 	}
 	
 	protected ResDir (ResourcesPackage resPack, JarEntry node) {
@@ -57,7 +56,7 @@ public class ResDir {
 		resourcesPackage = resPack;
 		dir = null;
 		// TODO Path is not relative
-		path = node.getName();
+		path = node.getName().substring(resPack.getResRootPath().length() - 1);
 	}
 	
 	public String getPath () {
@@ -98,7 +97,7 @@ public class ResDir {
 				if (
 						entry.getName().length() > jarEntry.getName().length() &&
 								entry.getName().substring(0, jarEntry.getName().length()).equals(jarEntry.getName()) &&
-								entry.getName().matches("\\S+?[\\\\/]$")
+								entry.getName().matches(".+?[\\\\/]$")
 				) {
 					rt.add(new ResDir(resourcesPackage, entry));
 				}
