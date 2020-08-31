@@ -12,7 +12,7 @@ public class ResourcesPackage {
 	
 	public static final String PACKID = "suk-restools";
 	public static final String VERSION = "0.1-dev";
-	public static final int BUILD = 3;
+	public static final int BUILD = 4;
 	
 	private final ProjectType type;
 	

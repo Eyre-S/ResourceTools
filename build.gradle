@@ -24,6 +24,10 @@ shadowJar {
     version = '1.0.0'
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 group 'cc.sukazyo'
 version '0.1'
 

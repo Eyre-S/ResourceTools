@@ -1,6 +1,7 @@
 package cc.sukazyo.restools;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -110,6 +111,21 @@ public class ResDir {
 			}
 		}
 		return rt.toArray(new ResDir[0]);
+	}
+	
+	public void extract (File toDir) throws IOException {
+		if (toDir.isDirectory() || toDir.mkdir()) {
+			for (ResFile file : this.listFiles()) {
+				FilesHelper.copyFile(
+						file.read(),
+						new FileOutputStream(new File(
+								FilesHelper.getDirectoryAbsolutePath(toDir) +
+										file.getPath().substring(this.path.length())))
+				);
+			}
+		} else {
+			throw new IOException("Create Directory Failed: " + toDir.getAbsolutePath());
+		}
 	}
 	
 }
