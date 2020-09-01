@@ -19,9 +19,9 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 mainClassName='test.ResourcesTest'
 shadowJar {
-    baseName = 'jarName'
+    baseName = 'ResourceTools'
     classifier = null
-    version = '1.0.0'
+    version = '0.2-build6'
 }
 
 tasks.withType(JavaCompile) {
@@ -29,7 +29,7 @@ tasks.withType(JavaCompile) {
 }
 
 group 'cc.sukazyo'
-version '0.1'
+version '0.2'
 
 repositories {
     mavenCentral()

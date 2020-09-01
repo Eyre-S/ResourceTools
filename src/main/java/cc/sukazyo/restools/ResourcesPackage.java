@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 public class ResourcesPackage {
 	
 	public static final String PACKID = "suk-restools";
-	public static final String VERSION = "0.1";
-	public static final int BUILD = 5;
+	public static final String VERSION = "0.2";
+	public static final int BUILD = 6;
 	
 	private final ProjectType type;
 	
@@ -21,21 +21,21 @@ public class ResourcesPackage {
 	private File root;
 	private JarFile jar;
 	
-	public ResourcesPackage(String resRoot) throws IOException {
+	public ResourcesPackage(Class proj, String resRoot) throws IOException {
 		
 		resRoot = cutPath(resRoot);
 		
-		String protocol = ResourcesPackage.class.getResource("").getProtocol();
+		String protocol = proj.getResource("").getProtocol();
 		if ("jar".equals(protocol)){
 			jar = new JarFile(
 					java.net.URLDecoder.decode(
-							this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath(),
+							proj.getProtectionDomain().getCodeSource().getLocation().getPath(),
 							StandardCharsets.UTF_8.name()
 					)
 			);
 			type = ProjectType.JAR;
 		} else if("file".equals(protocol)){
-			root = new File(ResourcesPackage.class.getResource("/" + resRoot).getFile()).getParentFile();
+			root = new File(proj.getResource("/" + resRoot).getFile()).getParentFile();
 			type = ProjectType.DIR;
 		} else {
 			throw new IOException("Project File is not on a dir or in a jar.");
