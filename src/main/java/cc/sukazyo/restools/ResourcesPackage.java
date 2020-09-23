@@ -1,11 +1,7 @@
 package cc.sukazyo.restools;
 
-import com.sun.org.glassfish.gmbal.Description;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,24 +87,18 @@ public class ResourcesPackage {
 	}
 	
 	/**
-	 * !!!开发用方法，请勿使用!!!
-	 * 用于开发时获取到项目打包后的jar文件对象
+	 * 用于获取到项目打包后的jar文件对象
 	 * @return jar文件对象
 	 */
-	@Deprecated
-	@Description("!!!开发用方法，请勿使用!!!")
-	public JarFile getJar () {
+	JarFile getJar () {
 		return jar;
 	}
 	
 	/**
-	 * !!!开发用方法，请勿使用!!!
-	 * 用于开发时获取到当项目未打包时的所在目录
+	 * 用于获取到当项目未打包时的所在目录
 	 * @return 所在目录
 	 */
-	@Deprecated
-	@Description("!!!开发用方法，请勿使用!!!")
-	public File getRoot () {
+	File getRoot () {
 		return root;
 	}
 	
@@ -164,6 +154,12 @@ public class ResourcesPackage {
 		return new ResDir(this, resRoot + path);
 	}
 	
+	/**
+	 * 返回说明这个项目的储存形式和路径的字符串
+	 * eg: jar:/home/your/108/4434/ResourcesTools.jar
+	 *
+	 * @return 字符串
+	 */
 	@Override
 	public String toString() {
 		if (root != null) {
@@ -174,31 +170,23 @@ public class ResourcesPackage {
 		return null;
 	}
 	
-	enum ProjectType {
+	/**
+	 * 项目的两种储存形式
+	 * DIR: 以未打包的形式储存
+	 * JAR: 以已打包的形式储存于一个jar文件中
+	 */
+	public enum ProjectType {
 		DIR, JAR
 	}
 	
-	public void test () {
-		if (isJarPack()) {
-			for (Enumeration<JarEntry> e = getJar().entries(); e.hasMoreElements(); ) {
-				JarEntry entry = e.nextElement();
-				System.out.println(entry.getName());
-			}
-		} else if (isDirPack()) {
-			forEachDir(root);
-		}
-	}
-	
-	private static void forEachDir (File dir) {
-		for (File sub : dir.listFiles()) {
-			if (sub.isFile()) {
-				System.out.println(sub.getPath());
-			} else if (sub.isDirectory()) {
-				forEachDir(sub);
-			}
-		}
-	}
-	
+	/**
+	 * 用于规范输入的目录路径
+	 * 所有的路径都会被规范为 "xxx/"的形式（前不带斜杠，后带斜杠）
+	 * 只能用于目录
+	 *
+	 * @param path 用户输入
+	 * @return 规范好的路径
+	 */
 	private String cutPath (String path) {
 		Matcher matcher = Pattern.compile("^[/\\\\]?(.+?)[/\\\\]?$").matcher(path);
 		if (matcher.find()) {
@@ -207,6 +195,12 @@ public class ResourcesPackage {
 		return path;
 	}
 	
+	/**
+	 * 用于将绝对路径（以"/"(Unix)或盘符(Win)为根的路径）截取为以项目资源文件为根的相对路径
+	 *
+	 * @param absolutePath 绝对路径
+	 * @return 相对路径
+	 */
 	public String pathRelativization (String absolutePath) {
 		if (this.isDirPack()) {
 			String assRoot = this.root.getAbsolutePath() + File.separator + resRoot.substring(0, resRoot.length()-1);
