@@ -54,7 +54,7 @@ public class ResourcesPackage {
 	 *
 	 * @throws IOException 当读文件/文件夹出现问题时抛出的异常
 	 */
-	public ResourcesPackage(Class proj, String resRoot) throws IOException {
+	public ResourcesPackage(Class<?> proj, String resRoot) throws IOException {
 		
 		resRoot = cutPath(resRoot);
 		
