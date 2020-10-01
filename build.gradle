@@ -16,12 +16,10 @@ plugins {
 apply plugin:'java'
 apply plugin: 'eclipse'
 apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'application'
-mainClassName='test.ResourcesTest'
 shadowJar {
     baseName = 'ResourceTools'
-    classifier = null
-    version = '0.2-build6'
+    version = '0.2.1'
+    classifier = 'build8'
 }
 
 tasks.withType(JavaCompile) {
