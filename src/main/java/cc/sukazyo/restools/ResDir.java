@@ -38,7 +38,7 @@ public class ResDir {
 		resourcesPackage = resPack;
 		this.path = path.substring(resPack.getResRootPath().length() - 1);
 		if (resourcesPackage.isDirPack()) {
-			dirTemp = new File(resourcesPackage.getRoot().getPath() + "/" + path);
+			dirTemp = new File(FilesHelper.encode(resourcesPackage.getRoot().getPath()) + "/" + path);
 			if (!dirTemp.isDirectory())
 				throw new IOException("No such resource dir in projDir: " + path);
 		} else if (resourcesPackage.isJarPack()) {
@@ -111,6 +111,7 @@ public class ResDir {
 	 *
 	 * @return 资源文件组
 	 */
+	@SuppressWarnings("all")
 	public ResFile[] listFiles () {
 		List<ResFile> rt = new ArrayList<>();
 		if (resourcesPackage.isJarPack()) {
@@ -143,6 +144,7 @@ public class ResDir {
 	 *
 	 * @return 子文件夹组
 	 */
+	@SuppressWarnings("all")
 	public ResDir[] listDirs () {
 		List<ResDir> rt = new ArrayList<>();
 		if (resourcesPackage.isJarPack()) {
@@ -205,7 +207,7 @@ public class ResDir {
 				);
 			}
 		} else {
-			throw new IOException("Create Directory Failed: " + toDir.getAbsolutePath());
+			throw new IOException("Create Directory Failed: " + FilesHelper.encode(toDir.getAbsolutePath()));
 		}
 	}
 	

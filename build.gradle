@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         maven {
-            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+            url 'https://maven.aliyun.com/nexus/content/groups/public/'
         }
     }
     dependencies {
@@ -19,7 +19,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 shadowJar {
     baseName = 'ResourceTools'
     version = '0.2.1'
-    classifier = 'build8'
+    classifier = 'build9'
 }
 
 tasks.withType(JavaCompile) {

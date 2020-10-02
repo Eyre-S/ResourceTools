@@ -33,7 +33,7 @@ public class ResourcesPackage {
 	 * @value
 	 * （enmnm...如果不是出了什么事故的话...）
 	 */
-	public static final int BUILD = 8;
+	public static final int BUILD = 9;
 	
 	/** 标明这个项目的文件结构类型 */
 	private final ProjectType type;
@@ -73,6 +73,8 @@ public class ResourcesPackage {
 			root = new File(proj.getResource("/" + resRoot).getFile()).getParentFile();
 			type = ProjectType.DIR;
 		} else {
+			System.err.println("Crashed! Unknown File Protocol.");
+			System.exit(-123);
 			type = null;
 		}
 		
@@ -165,7 +167,7 @@ public class ResourcesPackage {
 	@Override
 	public String toString() {
 		if (root != null) {
-			return "dir:" + root.getAbsoluteFile();
+				return "dir:" + FilesHelper.encode(root.getAbsoluteFile().getAbsolutePath());
 		} else if (jar != null) {
 			return "jar:" + jar.getName();
 		}
@@ -203,9 +205,10 @@ public class ResourcesPackage {
 	 * @param absolutePath 绝对路径
 	 * @return 相对路径
 	 */
+	@SuppressWarnings("all")
 	public String pathRelativization (String absolutePath) {
 		if (this.isDirPack()) {
-			String assRoot = this.root.getAbsolutePath() + File.separator + resRoot.substring(0, resRoot.length()-1);
+			String assRoot = FilesHelper.encode(this.root.getAbsolutePath()) + File.separator + resRoot.substring(0, resRoot.length()-1);
 //			System.out.println(absolutePath + "|" + assRoot);
 			if (!absolutePath.substring(0, assRoot.length()).equals(assRoot))
 				return absolutePath;
