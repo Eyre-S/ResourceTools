@@ -33,7 +33,7 @@ public class ResFile {
 		resourcesPackage = resPack;
 		this.path = path.substring(resPack.getResRootPath().length() - 1);
 		if (resourcesPackage.isDirPack()) {
-			dirTemp = new File(resourcesPackage.getRoot().getPath() + "/" + path);
+			dirTemp = new File(FilesHelper.encode(resourcesPackage.getRoot().getPath()) + "/" + path);
 			if (!dirTemp.isFile())
 				throw new IOException("No such resource in projDir: " + path);
 		} else if (resourcesPackage.isJarPack()) {
@@ -67,7 +67,7 @@ public class ResFile {
 		resourcesPackage = resPack;
 		dirFile = node;
 		// TODO Path is not relative
-		path = resPack.pathRelativization(node.getAbsolutePath());
+		path = resPack.pathRelativization(FilesHelper.encode(node.getAbsolutePath()));
 	}
 	
 	/**

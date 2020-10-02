@@ -26,14 +26,14 @@ public class ResourcesPackage {
 	 * 当前的语义化版本号
 	 * @value
 	 */
-	public static final String VERSION = "0.2";
+	public static final String VERSION = "0.2.1";
 	/**
 	 * 当前的开发版本号，是开发者辨认版本的重要途径
 	 * 每次完成一项小任务，提交一次commit都会更改，确保流出版本的build号不相同
 	 * @value
 	 * （enmnm...如果不是出了什么事故的话...）
 	 */
-	public static final int BUILD = 6;
+	public static final int BUILD = 9;
 	
 	/** 标明这个项目的文件结构类型 */
 	private final ProjectType type;
@@ -51,27 +51,31 @@ public class ResourcesPackage {
 	 *
 	 * @param proj 某项目包含的类，ResPack将以此类所在的位置寻找资源
 	 * @param resRoot 资源文件的文件夹相对于项目根目录的位置
-	 *
-	 * @throws IOException 当读文件/文件夹出现问题时抛出的异常
 	 */
-	public ResourcesPackage(Class<?> proj, String resRoot) throws IOException {
+	public ResourcesPackage(Class<?> proj, String resRoot) {
 		
 		resRoot = cutPath(resRoot);
 		
 		String protocol = proj.getResource("").getProtocol();
 		if ("jar".equals(protocol)){
-			jar = new JarFile(
-					java.net.URLDecoder.decode(
-							proj.getProtectionDomain().getCodeSource().getLocation().getPath(),
-							StandardCharsets.UTF_8.name()
-					)
-			);
+			try {
+				jar = new JarFile(
+						java.net.URLDecoder.decode(
+								proj.getProtectionDomain().getCodeSource().getLocation().getPath(),
+								StandardCharsets.UTF_8.name()
+						)
+				);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			type = ProjectType.JAR;
 		} else if("file".equals(protocol)){
 			root = new File(proj.getResource("/" + resRoot).getFile()).getParentFile();
 			type = ProjectType.DIR;
 		} else {
-			throw new IOException("Project File is not on a dir or in a jar.");
+			System.err.println("Crashed! Unknown File Protocol.");
+			System.exit(-123);
+			type = null;
 		}
 		
 		this.resRoot = resRoot;
@@ -163,7 +167,7 @@ public class ResourcesPackage {
 	@Override
 	public String toString() {
 		if (root != null) {
-			return "dir:" + root.getAbsoluteFile();
+				return "dir:" + FilesHelper.encode(root.getAbsoluteFile().getAbsolutePath());
 		} else if (jar != null) {
 			return "jar:" + jar.getName();
 		}
@@ -201,9 +205,10 @@ public class ResourcesPackage {
 	 * @param absolutePath 绝对路径
 	 * @return 相对路径
 	 */
+	@SuppressWarnings("all")
 	public String pathRelativization (String absolutePath) {
 		if (this.isDirPack()) {
-			String assRoot = this.root.getAbsolutePath() + File.separator + resRoot.substring(0, resRoot.length()-1);
+			String assRoot = FilesHelper.encode(this.root.getAbsolutePath()) + File.separator + resRoot.substring(0, resRoot.length()-1);
 //			System.out.println(absolutePath + "|" + assRoot);
 			if (!absolutePath.substring(0, assRoot.length()).equals(assRoot))
 				return absolutePath;
