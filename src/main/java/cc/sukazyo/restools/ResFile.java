@@ -141,14 +141,19 @@ public class ResFile {
 	public String readAsString () throws IOException {
 		InputStream inputStream = this.read();
 		
-		StringBuilder sb = new StringBuilder();
-		String line;
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-		while ((line = br.readLine()) != null) {
-			sb.append(line);
+		String str = null;
+		byte[] data = new byte[inputStream.available()];
+		if (inputStream.read(data) > -1) {
+			str = new String(data);
 		}
-		return sb.toString();
+//		StringBuilder sb = new StringBuilder();
+//		String line;
+//
+//		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+//		while ((line = br.readLine()) != null) {
+//			sb.append(line);
+//		}
+		return str;
 	}
 	
 }

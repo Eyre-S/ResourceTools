@@ -18,8 +18,8 @@ apply plugin: 'eclipse'
 apply plugin: 'com.github.johnrengelman.shadow'
 shadowJar {
     baseName = 'ResourceTools'
-    version = '0.2.1'
-    classifier = 'build9'
+    version = '0.2.2'
+    classifier = 'build10'
 }
 
 tasks.withType(JavaCompile) {
