@@ -26,14 +26,14 @@ public class ResourcesPackage {
 	 * 当前的语义化版本号
 	 * @value
 	 */
-	public static final String VERSION = "0.2.1";
+	public static final String VERSION = "0.2.2";
 	/**
 	 * 当前的开发版本号，是开发者辨认版本的重要途径
 	 * 每次完成一项小任务，提交一次commit都会更改，确保流出版本的build号不相同
 	 * @value
 	 * （enmnm...如果不是出了什么事故的话...）
 	 */
-	public static final int BUILD = 9;
+	public static final int BUILD = 10;
 	
 	/** 标明这个项目的文件结构类型 */
 	private final ProjectType type;
