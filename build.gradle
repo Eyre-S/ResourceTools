@@ -1,38 +1,49 @@
-buildscript {
-    repositories {
-        maven {
-            url 'https://maven.aliyun.com/nexus/content/groups/public/'
-        }
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
-    }
-}
-
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
-apply plugin:'java'
-apply plugin: 'eclipse'
-apply plugin: 'com.github.johnrengelman.shadow'
-shadowJar {
-    baseName = 'ResourceTools'
-    version = '0.2.2'
-    classifier = 'build10'
+group 'cc.sukazyo'
+version '0.2.2'
+project.ext.artifactId = 'resource-tools'
+
+repositories {}
+
+dependencies {}
+
+java {
+    withSourcesJar()
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-group 'cc.sukazyo'
-version '0.2'
-
-repositories {
-    mavenCentral()
+tasks.withType(Javadoc) {
+    options.encoding = 'UTF-8'
+    options.docEncoding = 'UTF-8'
+    options.charSet = 'UTF-8'
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+publishing {
+    repositories {
+        maven {
+            url = "file://" + new File("./build/publishing").getAbsolutePath()
+        }
+        maven{
+            url = publishMvnRepoUrl
+            credentials {
+                username publishMvnRepoUsername
+                password publishMvnRepoPassword
+            }
+        }
+    }
+    publications {
+        main (MavenPublication) {
+            from components.java
+            groupId = project.group
+            artifactId = project.ext.artifactId
+            version = project.version
+        }
+    }
 }
