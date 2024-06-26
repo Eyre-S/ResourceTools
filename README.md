@@ -1,63 +1,53 @@
+<div align="center">
+
 ![](./post.png)
-<p align="center" >一个用于快速调用Java项目资源文件的工具包</p>
+
+A tool lib for easily getting the resources in your classpath (dir or jar)!
+
+[badge_release_img]: https://img.shields.io/github/v/release/Eyre-S/ResourceTools?display_name=release&label=latest&color=#00fa9a
+[badge_release_target]: https://mvn.sukazyo.cc/#/releases/cc/sukazyo/resource-tools
+[badge_tests_img]: https://img.shields.io/github/actions/workflow/status/Eyre-S/ResourceTools/test?label=Tests&color=dark-green
+[badge_snapshot_img]: https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fmvn.sukazyo.cc%2Fsnapshots%2Fcc%2Fsukazyo%2Fresource-tools%2Fmaven-metadata.xml&label=snapshots&color=%231e90ff
+[badge_snapshot_target]: https://mvn.sukazyo.cc/#/snapshots/cc/sukazyo/resource-tools
+[![GitHub release][badge_release_img]][badge_release_target]
+![GitHub Workflow Status of test][badge_tests_img]
+[![Maven metadata of snapshots][badge_snapshot_img]][badge_snapshot_target]
+
+</div>
 
 ---
 
 #### NOTICE
-急需热心翻译（逃
+v0.3.x has VERY BIG differences with the v0.2.x.
 
 ---
 
 <br/>
 
-### 简介
+## Introduction
 
-ResourceTools 是一个用于让开发者们，尤其是全新Java开发者们，不再因为Java问题百出的资源文件获取而头疼的一个项目。
-> 话说Java资源文件获取真的很难还是我太垃圾了...?
-> 反正Sukazyo当年和现在一直都觉得资源文件的使用特别麻烦
+ResourceTools is a project that allows developers, especially new Java developers, to no longer have the problem of getting resource files with full of problems in Java.
 
-通过此工具包，就可以实现像使用 `java.io.File` 一样使用 `resources/`，不管是打包前还是打包后，都可以一段代码获取资源。
-> 或许比 java.io.File 还好用？（不可能的吧？
+Through this toolkit, you can use `resources/` in your classpath just like using `java.io.File` in disk. Whether before or after packaging, you can always get resources with a piece of code.
 
-<br/>
+## Usage
 
-### 使用
+See [Wiki](https://github.com/Eyre-S/ResourceTools/wiki).
 
-参见[本项目的 Github Wiki](https://github.com/Eyre-S/ResourceTools/wiki)
+## License & Contribute
 
-<br/>
+This project is under Apache 2.0 License.
 
-### 关于项目文件
+Feel free to contribute / submit an issue to anything.
 
-这个项目使用的是IDEA+Gradle写的，只要支持 Gradle 的 IDE 就可以 clone 下来[写pr~](https://github.com/Eyre-S/ResourceTools/pulls)（疯狂暗示~
+## Thanks To
 
-oh, 记得要添加相关的 .gitignore 条例，别把"垃圾文件"也交上来了
+Thanks to Stapx Steve allows me writing the previous versions README file based on his project [SS Tool Box](https://github.com/Stapxs/SS-Tool-Box).
 
-<br/>
+Thanks for your stars and watches and followers~!
 
-### 开源许可
+## End
 
-项目使用 Apache 2.0 开源。
-> 抱歉Sukazyo对开源协议的要求并不了解所以...欢迎补充...
+In the end, thanks to everyone supporting me in the past years. This project is my FIRST project has some real purpose, also my FIRST project I am going to do it for the public.
 
-<br/>
-
-### 项目相关人物
-
-##### 作者：
-
-目前仅有 Sukazyo 一人在开发
-
-##### 感谢以下支持者：
-
-并没有谁支持...（哭
-
-oh...感谢 SS 让我参考其 [SS Tool Box](https://github.com/Stapxs/SS-Tool-Box) 项目的 README
-
-如果你有心情的话，可以去给那个项目点一个 Star~
-
-如果观光者大人开恩的话也来给此项目和此作者贡献一个star和fo~
-
-<br/>
-
-最后，感谢看完本 README，这是 Sukazyo 写的第一个正式项目，如果有什么语言不太合适的地方直接[贴 issue](https://github.com/Eyre-S/ResourceTools/issues) 就好。有什么别的问题也直接[贴 issue](https://github.com/Eyre-S/ResourceTools/issues) 即可
+I am using this project v0.2.x in those years in many my other projects, although it is very immature and has many bugs. So I decide to update, or says to remake this project now. I kept the old Thanks To paragraphs, and there's *"If there is anything that the describing is not suitable for, just [post an issue](https://github.com/Eyre-S/ResourceTools/issues). If you have any other questions, just [post issue](https://github.com/Eyre-S/ResourceTools/issues) too"* in the old README, I think it suits for now too.

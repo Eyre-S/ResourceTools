@@ -1,49 +1,85 @@
 plugins {
-    id 'java'
-    id 'maven-publish'
+	id 'java'
+	id 'maven-publish'
+	id 'com.github.gmazzo.buildconfig' version '4.1.2'
 }
 
-group 'cc.sukazyo'
-version '0.2.2'
-project.ext.artifactId = 'resource-tools'
+static Closure mavenRepository (@DelegatesTo(MavenArtifactRepository.class) Closure closure) { closure }
+static Action<? extends PasswordCredentials> credentials (Action<? extends PasswordCredentials> action) { action }
 
-repositories {}
+var workshopCredentials = credentials { it ->
+	it.username = publishMvnRepoUsername
+	it.password = publishMvnRepoPassword
+}
+
+var workshopReleases = mavenRepository({
+	name 'wsReleases'
+	url "https://mvn.sukazyo.cc/releases"
+	credentials workshopCredentials
+})
+
+var workshopSnapshots = mavenRepository({
+	name "wsSnapshots"
+	url "https://mvn.sukazyo.cc/snapshots"
+	credentials workshopCredentials
+})
+
+final String proj_group = "cc.sukazyo"
+final String proj_archive_name = archive_name
+final String proj_package_name = proj_archive_name
+final boolean proj_is_snapshot = Boolean.parseBoolean(snapshot)
+final String proj_version = version + (proj_is_snapshot ? "-SNAPSHOT" : "")
+
+group proj_group
+version proj_version
+
+repositories {
+	mavenCentral()
+	workshopReleases
+}
 
 dependencies {}
 
 java {
-    withSourcesJar()
+	withJavadocJar()
+	withSourcesJar()
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+tasks.withType(JavaCompile).configureEach {
+	
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+	
+	options.encoding = "UTF-8"
+	
 }
 
-tasks.withType(Javadoc) {
-    options.encoding = 'UTF-8'
-    options.docEncoding = 'UTF-8'
-    options.charSet = 'UTF-8'
+tasks.withType(Javadoc).configureEach {
+	options.encoding = 'UTF-8'
+}
+
+tasks.withType(Jar).configureEach {
+	archiveBaseName.set proj_archive_name
 }
 
 publishing {
-    repositories {
-        maven {
-            url = "file://" + new File("./build/publishing").getAbsolutePath()
-        }
-        maven{
-            url = publishMvnRepoUrl
-            credentials {
-                username publishMvnRepoUsername
-                password publishMvnRepoPassword
-            }
-        }
-    }
-    publications {
-        main (MavenPublication) {
-            from components.java
-            groupId = project.group
-            artifactId = project.ext.artifactId
-            version = project.version
-        }
-    }
+	
+	publications {
+		resource_tools (MavenPublication) {
+			artifactId = proj_package_name
+			from components.java
+		}
+	}
+	
+	repositories {
+		maven {
+			name 'localArchives'
+			url publishMavenLocalDirectory
+		}
+		if (!proj_is_snapshot)
+			maven workshopReleases
+		else
+			maven workshopSnapshots
+	}
+	
 }
