@@ -38,7 +38,11 @@ repositories {
 	workshopReleases
 }
 
-dependencies {}
+dependencies {
+	
+	compileOnly 'com.github.spotbugs:spotbugs-annotations:4.8.4'
+	
+}
 
 java {
 	withJavadocJar()

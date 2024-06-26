@@ -1,4 +1,4 @@
-package cc.sukazyo.restools;
+package cc.sukazyo.restools.utils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

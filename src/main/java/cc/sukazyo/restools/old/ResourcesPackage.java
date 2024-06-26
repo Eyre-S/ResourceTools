@@ -1,10 +1,13 @@
-package cc.sukazyo.restools;
+package cc.sukazyo.restools.old;
 
+import cc.sukazyo.restools.utils.FilesHelper;
+import cc.sukazyo.restools.utils.PathsHelper;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.jar.JarFile;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Resources Package
@@ -17,30 +20,28 @@ import java.util.regex.Pattern;
  */
 public class ResourcesPackage {
 	
-	/**
-	 * Sukazyo 的项目都会有一个 Package ID
+	/** The type of this resource package.
+	 * <p>
+	 * Maybe DIR or JAR.
+	 *
+	 * @since 0.2.x
 	 */
-	public static final String PACKID = "suk-restools";
-	/**
-	 * 当前的语义化版本号
-	 */
-	public static final String VERSION = "0.2.2";
-	/**
-	 * 当前的开发版本号，是开发者辨认版本的重要途径
-	 * 每次完成一项小任务，提交一次commit都会更改，确保流出版本的build号不相同
-	 * （enmnm...如果不是出了什么事故的话...）
-	 */
-	public static final int BUILD = 10;
+	@Nonnull
+	private final PackageType type;
 	
-	/** 标明这个项目的文件结构类型 */
-	private final ProjectType type;
-	
-	/** 资源文件在项目内的位置，一般比如"assets" */
+	@Nonnull
 	private final String resRoot;
 	
-	/** 当项目是未打包的情况时的资源根目录 */
+	/** Root directory of the resource package.
+	 *<p>
+	 * Only exists when the {@link #type} is {@link PackageType#DIR}
+	 *
+	 * @since 0.2.x
+	 */
+	@Nullable
 	private File root;
-	/** 当项目打包后的jar文件对象 */
+	/** When this project is not packed, the root directory of the resource. */
+	@Nullable
 	private JarFile jar;
 	
 	/**
@@ -51,7 +52,7 @@ public class ResourcesPackage {
 	 */
 	public ResourcesPackage(Class<?> proj, String resRoot) {
 		
-		resRoot = cutPath(resRoot);
+		resRoot = PathsHelper.cutPath(resRoot);
 		
 		String protocol = proj.getResource("").getProtocol();
 		if ("jar".equals(protocol)){
@@ -65,10 +66,10 @@ public class ResourcesPackage {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			type = ProjectType.JAR;
+			type = PackageType.JAR;
 		} else if("file".equals(protocol)){
 			root = new File(proj.getResource("/" + resRoot).getFile()).getParentFile();
-			type = ProjectType.DIR;
+			type = PackageType.DIR;
 		} else {
 			System.err.println("Crashed! Unknown File Protocol.");
 			System.exit(-123);
@@ -83,7 +84,7 @@ public class ResourcesPackage {
 	 * 获得项目当前的文件结构类型
 	 * @return 项目文件类型
 	 */
-	public ProjectType getType () {
+	public PackageType getType () {
 		return type;
 	}
 	
@@ -118,7 +119,7 @@ public class ResourcesPackage {
 	 * @return 是否未打包
 	 */
 	public boolean isDirPack () {
-		return type == ProjectType.DIR;
+		return type == PackageType.DIR;
 	}
 	
 	/**
@@ -127,7 +128,7 @@ public class ResourcesPackage {
 	 * @return 是否已打包
 	 */
 	public boolean isJarPack () {
-		return type == ProjectType.JAR;
+		return type == PackageType.JAR;
 	}
 	
 	/**
@@ -151,7 +152,7 @@ public class ResourcesPackage {
 	 * @throws IOException 寻找目录时出现错误
 	 */
 	public ResDir getResDir (String path) throws IOException {
-		path = cutPath(path);
+		path = PathsHelper.cutPath(path);
 		return new ResDir(this, resRoot + path);
 	}
 	
@@ -169,31 +170,6 @@ public class ResourcesPackage {
 			return "jar:" + jar.getName();
 		}
 		return null;
-	}
-	
-	/**
-	 * 项目的两种储存形式
-	 * DIR: 以未打包的形式储存
-	 * JAR: 以已打包的形式储存于一个jar文件中
-	 */
-	public enum ProjectType {
-		DIR, JAR
-	}
-	
-	/**
-	 * 用于规范输入的目录路径
-	 * 所有的路径都会被规范为 "xxx/"的形式（前不带斜杠，后带斜杠）
-	 * 只能用于目录
-	 *
-	 * @param path 用户输入
-	 * @return 规范好的路径
-	 */
-	private String cutPath (String path) {
-		Matcher matcher = Pattern.compile("^[/\\\\]?(.+?)[/\\\\]?$").matcher(path);
-		if (matcher.find()) {
-			path = matcher.group(1) + "/";
-		}
-		return path;
 	}
 	
 	/**

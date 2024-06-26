@@ -1,4 +1,6 @@
-package cc.sukazyo.restools;
+package cc.sukazyo.restools.old;
+
+import cc.sukazyo.restools.utils.FilesHelper;
 
 import java.io.*;
 import java.util.Enumeration;
@@ -110,7 +112,7 @@ public class ResFile {
 	 * @return 是否为文件
 	 */
 	public boolean isFile () {
-		if (resourcesPackage.getType() == ResourcesPackage.ProjectType.DIR) {
+		if (resourcesPackage.getType() == PackageType.DIR) {
 			return dirFile.isFile();
 		} else {
 			return !jarEntry.isDirectory();
@@ -124,7 +126,7 @@ public class ResFile {
 	 * @throws IOException 读文件出现错误
 	 */
 	public InputStream read () throws IOException {
-		if (resourcesPackage.getType() == ResourcesPackage.ProjectType.DIR) {
+		if (resourcesPackage.getType() == PackageType.DIR) {
 			return new FileInputStream(dirFile);
 		} else {
 			return resourcesPackage.getJar().getInputStream(jarEntry);
