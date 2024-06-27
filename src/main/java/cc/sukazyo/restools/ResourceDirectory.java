@@ -10,14 +10,14 @@ public interface ResourceDirectory extends ResourceEntry {
 	ResourceFile getFile (String... path);
 	@Nonnull
 	default ResourceFile getFile (String path) {
-		return this.getFile(PathsHelper.pathStringToArray(path));
+		return this.getFile(PathsHelper.parseString(path));
 	}
 	
 	@Nonnull
 	ResourceDirectory getDirectory(String... path);
 	@Nonnull
 	default ResourceDirectory getDirectory(String path) {
-		return this.getDirectory(PathsHelper.pathStringToArray(path));
+		return this.getDirectory(PathsHelper.parseString(path));
 	}
 	
 	@Nonnull

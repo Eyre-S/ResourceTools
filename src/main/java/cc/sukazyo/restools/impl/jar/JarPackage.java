@@ -1,4 +1,4 @@
-package cc.sukazyo.restools.impl.pack;
+package cc.sukazyo.restools.impl.jar;
 
 import cc.sukazyo.restools.ResourceDirectory;
 import cc.sukazyo.restools.ResourceFile;

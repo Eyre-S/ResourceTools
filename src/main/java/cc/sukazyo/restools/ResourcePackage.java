@@ -1,20 +1,25 @@
 package cc.sukazyo.restools;
 
-import cc.sukazyo.restools.impl.pack.DirectoryPackage;
-import cc.sukazyo.restools.impl.pack.JarPackage;
+import cc.sukazyo.restools.impl.disk.DiskPackage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public interface ResourcePackage extends ResourceDirectory, ResourceEntry {
 	
-	static ResourcePackage get (Class<?> clazz) {
+	class UnsupportedPackageTypeException extends Exception {}
+	
+	static ResourcePackage get (ClassLoader classLoader, String... identifierFilePath) throws UnsupportedPackageTypeException {
 		
-		try { return new DirectoryPackage(clazz); } catch (Exception ignored) {}
-		try { return new JarPackage(clazz); } catch (Exception ignored) {}
+		try { return new DiskPackage(classLoader, identifierFilePath); } catch (UnsupportedPackageTypeException ignored) {}
+//		try { return new JarPackage(identifierFilePath); } catch (UnsupportedPackageTypeException ignored) {}
 		
-		throw new RuntimeException("Unsupported resource type"); // TODO
+		throw new UnsupportedPackageTypeException();
 		
+	}
+	
+	static ResourcePackage get (String... identifierFilePath) throws UnsupportedPackageTypeException {
+		return get(Thread.currentThread().getContextClassLoader(), identifierFilePath);
 	}
 	
 	@Nonnull
