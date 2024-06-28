@@ -1,5 +1,7 @@
 package cc.sukazyo.restools.utils;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -15,7 +17,8 @@ public class PathsHelper {
 	 * <p>
 	 * For directory paths only!
 	 */
-	public static String cutPath (String path) {
+	@Nonnull
+	public static String cutPath (@Nonnull String path) {
 		Matcher matcher = Pattern.compile("^[/\\\\]?(.+?)[/\\\\]?$").matcher(path);
 		if (matcher.find()) {
 			path = matcher.group(1) + "/";
@@ -23,17 +26,28 @@ public class PathsHelper {
 		return path;
 	}
 	
-	public static String[] parseString (String paths) {
+	@Nonnull
+	public static String getJarPath (@Nonnull String path) {
+		final int jarIdentifier = path.lastIndexOf("/") - 1;
+		if (jarIdentifier > 0 && path.startsWith("jar:"))
+			return path.substring("jar:".length(), jarIdentifier);
+		else return path;
+	}
+	
+	@Nonnull
+	public static String[] parseString (@Nonnull String paths) {
 		return Arrays.stream(paths.split("[/\\\\]"))
 				.filter(x -> !"".equals(x))
 				.toArray(String[]::new);
 	}
 	
-	public static String compile (String[] path) {
+	@Nonnull
+	public static String compile (@Nonnull String[] path) {
 		return Arrays.stream(path).reduce((a, b) -> a + "/" + b).orElse("");
 	}
 	
-	public static Path getParent (Path current, int level) {
+	@Nonnull
+	public static Path getParent (@Nonnull Path current, @Nonnegative int level) {
 		Path parent = current;
 		for (int i = 0; i < level; i++) {
 			parent = parent.getParent();
@@ -41,17 +55,20 @@ public class PathsHelper {
 		return parent;
 	}
 	
-	public static String[] dropLast (String[] array, int n) {
+	@Nonnull
+	public static String[] dropLast (@Nonnull String[] array, @Nonnegative int n) {
 		return Arrays.stream(array)
 				.limit(array.length - n)
 				.toArray(String[]::new);
 	}
 	
-	public static String[] dropLast (String[] array) {
+	@Nonnull
+	public static String[] dropLast (@Nonnull String[] array) {
 		return dropLast(array, 1);
 	}
 	
-	public static String[] join (String[] original, String... additional) {
+	@Nonnull
+	public static String[] join (@Nonnull String[] original, @Nonnull String... additional) {
 		String[] result = new String[original.length + additional.length];
 		System.arraycopy(original, 0, result, 0, original.length);
 		System.arraycopy(additional, 0, result, original.length, additional.length);

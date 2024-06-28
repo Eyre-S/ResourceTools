@@ -6,7 +6,6 @@ import cc.sukazyo.restools.utils.PathsHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -32,14 +31,6 @@ public class DiskFile implements ResourceFile, IDiskEntry {
 	@Override
 	public InputStream read () throws IOException {
 		return new FileInputStream(file.toFile());
-	}
-	
-	@Nonnull
-	@Override
-	public String readString (Charset charset) throws IOException {
-		try (var stream = this.read()) {
-			return new String(stream.readAllBytes(), charset);
-		}
 	}
 	
 	@Nonnull

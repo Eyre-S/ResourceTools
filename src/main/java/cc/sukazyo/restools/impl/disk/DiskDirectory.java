@@ -28,17 +28,17 @@ public class DiskDirectory implements IDiskDirectory, IDiskEntry, ResourceDirect
 		this.directory = target.toPath();
 	}
 	
-	public static class UpTopException extends Exception {
+	public static class GoUpMeetsTopException extends Exception {
 		public final DiskPackage pack;
-		public UpTopException (DiskPackage pack) {
+		public GoUpMeetsTopException (DiskPackage pack) {
 			super("Got to the resource package top level directory when trying to go up.");
 			this.pack = pack;
 		}
 	}
 	
-	protected DiskDirectory (DiskPackage pack, Path parent_dir, String[] old_path, int upLevels) throws UpTopException {
+	protected DiskDirectory (DiskPackage pack, Path parent_dir, String[] old_path, int upLevels) throws GoUpMeetsTopException {
 		final String[] newPath = PathsHelper.dropLast(old_path, upLevels);
-		if (newPath.length == 0) throw new UpTopException(pack);
+		if (newPath.length == 0) throw new GoUpMeetsTopException(pack);
 		this.pack = pack;
 		this.path = newPath;
 		this.directory = PathsHelper.getParent(parent_dir, upLevels);
@@ -67,7 +67,7 @@ public class DiskDirectory implements IDiskDirectory, IDiskEntry, ResourceDirect
 	public IDiskDirectory getParentDirectory () {
 		try {
 			return new DiskDirectory(this.pack, this.directory, this.path, 1);
-		} catch (UpTopException e) {
+		} catch (GoUpMeetsTopException e) {
 			return e.pack;
 		}
 	}

@@ -29,7 +29,7 @@ public class DiskPackage implements ResourcePackage, IDiskDirectory, IDiskEntry 
 		try {
 			identifierRealPath = Paths.get(resURL.toURI());
 		} catch (URISyntaxException e) {
-			throw new IllegalStateException("Cannot get resource's package due to an internal error.", e);
+			throw new IllegalStateException("Cannot get the root dir of the required resource " + resPath + ".", e);
 		}
 		this.packageRoot = PathsHelper.getParent(identifierRealPath, resLevel);
 		

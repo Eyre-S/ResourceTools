@@ -12,7 +12,11 @@ public interface ResourceFile extends ResourceEntry {
 	InputStream read () throws IOException;
 	
 	@Nonnull
-	String readString (Charset charset) throws IOException;
+	default String readString (Charset charset) throws IOException {
+		try (var stream = this.read()) {
+			return new String(stream.readAllBytes(), charset);
+		}
+	}
 	
 	@Nonnull
 	default String readString () throws IOException {
