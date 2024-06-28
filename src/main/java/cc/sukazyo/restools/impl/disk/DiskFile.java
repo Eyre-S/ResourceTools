@@ -4,24 +4,27 @@ import cc.sukazyo.restools.ResourceFile;
 import cc.sukazyo.restools.utils.PathsHelper;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class DiskFile implements ResourceFile, IDiskEntry {
 	
+	@Nonnull
 	public final DiskPackage pack;
+	@Nonnull
 	public final String[] path;
+	@Nonnull
 	public final Path file;
 	
-	public DiskFile (DiskPackage pack, Path parent_dir, String[] path) {
+	public DiskFile (@Nonnull DiskPackage pack, @Nonnull Path parent_dir, @Nonnull String[] path) {
 		this.pack = pack;
 		this.path = path;
 		this.file = Paths.get(parent_dir.toString(), path);
 	}
 	
-	DiskFile (DiskPackage pack, IDiskDirectory parent, File target) {
+	DiskFile (@Nonnull DiskPackage pack, @Nonnull IDiskDirectory parent, @Nonnull File target) {
 		this.pack = pack;
 		this.path = PathsHelper.join(parent.getPath(), target.getName());
 		this.file = target.toPath();
@@ -30,7 +33,7 @@ public class DiskFile implements ResourceFile, IDiskEntry {
 	@Nonnull
 	@Override
 	public InputStream read () throws IOException {
-		return new FileInputStream(file.toFile());
+		return Files.newInputStream(file);
 	}
 	
 	@Nonnull

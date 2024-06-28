@@ -10,20 +10,20 @@ public interface IDiskDirectory extends ResourceDirectory, IDiskEntry {
 	
 	@Nonnull
 	@Override
-	default DiskFile getFile (String... path) {
+	default DiskFile getFile (@Nonnull String... path) {
 		return new DiskFile(this.getOwnerPackage(), this.getRealPath(), path);
 	}
 	
 	@Nonnull
 	@Override
-	default IDiskDirectory getDirectory (String... path) {
+	default IDiskDirectory getDirectory (@Nonnull String... path) {
 		return new DiskDirectory(this.getOwnerPackage(), this.getRealPath(), path);
 	}
 	
 	@Nonnull
 	@Override
 	default DiskFile[] listFiles () {
-		File[] filesAll = this.getRealPath().toFile().listFiles(File::isFile);
+		final File[] filesAll = this.getRealPath().toFile().listFiles(File::isFile);
 		assert filesAll != null;
 		return Arrays.stream(filesAll)
 					 .map(file -> new DiskFile(this.getOwnerPackage(), this, file))
@@ -33,7 +33,7 @@ public interface IDiskDirectory extends ResourceDirectory, IDiskEntry {
 	@Nonnull
 	@Override
 	default IDiskDirectory[] listDirectories () {
-		File[] filesAll = this.getRealPath().toFile().listFiles(File::isDirectory);
+		final File[] filesAll = this.getRealPath().toFile().listFiles(File::isDirectory);
 		assert filesAll != null;
 		return Arrays.stream(filesAll)
 				.map(file -> new DiskDirectory(this.getOwnerPackage(), this, file))

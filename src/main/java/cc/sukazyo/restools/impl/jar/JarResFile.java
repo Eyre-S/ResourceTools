@@ -5,7 +5,6 @@ import cc.sukazyo.restools.ResourceFile;
 import cc.sukazyo.restools.impl.jar.tree.*;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -23,15 +22,15 @@ public class JarResFile implements ResourceFile, IJarEntry {
 		this.pack = parent.getOwnerPackage();
 		IBranchNode _parent = parent.getNode();
 		for (int i = 0; i < path.length - 1; i++) {
-			var maybeParent = _parent.getChild(path[i]);
+			INode maybeParent = _parent.getChild(path[i]);
 			if (maybeParent == null) throw new NullPointerException();
-			if (maybeParent instanceof IBranchNode nowParent)
-				_parent = nowParent;
+			if (maybeParent instanceof IBranchNode)
+				_parent = (IBranchNode)maybeParent;
 			else throw new NullPointerException();
 		}
-		var maybeDirectory = _parent.getChild(path[path.length-1]);
-		if (maybeDirectory instanceof NodeFileEntry nowFile)
-			this.entryNode = nowFile;
+		final INode maybeFile = _parent.getChild(path[path.length-1]);
+		if (maybeFile instanceof NodeFileEntry)
+			this.entryNode = (NodeFileEntry)maybeFile;
 		else throw new NullPointerException();
 	}
 	
@@ -56,7 +55,7 @@ public class JarResFile implements ResourceFile, IJarEntry {
 	@Nonnull
 	@Override
 	public ResourceDirectory getParentDirectory () {
-		final var parentNode = this.entryNode.parent();
+		final IBranchNode parentNode = this.entryNode.parent();
 		if (parentNode instanceof NodeRoot)
 			return this.pack;
 		return new JarDirectory(this.pack, (NodeDirectoryEntry)this.entryNode.parent());

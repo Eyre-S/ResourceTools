@@ -3,40 +3,46 @@ package cc.sukazyo.restools.impl.disk;
 import cc.sukazyo.restools.ResourceDirectory;
 import cc.sukazyo.restools.utils.PathsHelper;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class DiskDirectory implements IDiskDirectory, IDiskEntry, ResourceDirectory {
 	
+	@Nonnull
 	public final DiskPackage pack;
 	
+	@Nonnull
 	public final String[] path;
+	@Nonnull
 	public final Path directory;
 	
-	public DiskDirectory (DiskPackage pack, Path parent_dir, String[] path) {
+	public DiskDirectory (@Nonnull DiskPackage pack, @Nonnull Path parent_dir, @Nonnull String[] path) {
 		this.pack = pack;
 		this.path = path;
 		this.directory = Paths.get(parent_dir.toString(), path);
 	}
 	
-	DiskDirectory (DiskPackage pack, IDiskDirectory parent, File target) {
+	DiskDirectory (@Nonnull DiskPackage pack, @Nonnull IDiskDirectory parent, @Nonnull File target) {
 		this.pack = pack;
 		this.path = PathsHelper.join(parent.getPath(), target.getName());
 		this.directory = target.toPath();
 	}
 	
 	public static class GoUpMeetsTopException extends Exception {
-		public final DiskPackage pack;
-		public GoUpMeetsTopException (DiskPackage pack) {
+		@Nonnull public final DiskPackage pack;
+		public GoUpMeetsTopException (@Nonnull DiskPackage pack) {
 			super("Got to the resource package top level directory when trying to go up.");
 			this.pack = pack;
 		}
 	}
 	
-	protected DiskDirectory (DiskPackage pack, Path parent_dir, String[] old_path, int upLevels) throws GoUpMeetsTopException {
+	protected DiskDirectory (
+			@Nonnull DiskPackage pack, @Nonnull Path parent_dir,
+			@Nonnull String[] old_path, @Nonnegative int upLevels
+	) throws GoUpMeetsTopException {
 		final String[] newPath = PathsHelper.dropLast(old_path, upLevels);
 		if (newPath.length == 0) throw new GoUpMeetsTopException(pack);
 		this.pack = pack;
@@ -62,7 +68,7 @@ public class DiskDirectory implements IDiskDirectory, IDiskEntry, ResourceDirect
 		return this.path;
 	}
 	
-	@Nullable
+	@Nonnull
 	@Override
 	public IDiskDirectory getParentDirectory () {
 		try {

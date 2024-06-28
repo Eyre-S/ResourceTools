@@ -1,31 +1,32 @@
 package cc.sukazyo.restools.impl.disk;
 
 import cc.sukazyo.restools.ResourcePackage;
-import cc.sukazyo.restools.utils.FilesHelper;
 import cc.sukazyo.restools.utils.PathsHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class DiskPackage implements ResourcePackage, IDiskDirectory, IDiskEntry {
 	
+	@Nonnull
 	public final Path packageRoot;
 	
-	public DiskPackage (ClassLoader classLoader, @Nonnull String[] identifierFilePath)
+	public DiskPackage (@Nonnull ClassLoader classLoader, @Nonnull String[] identifierFilePath)
 	throws UnsupportedPackageTypeException {
 		
 		final String resPath = PathsHelper.compile(identifierFilePath);
 		final int resLevel = identifierFilePath.length;
-		final var resURL = classLoader.getResource(resPath);
+		final URL resURL = classLoader.getResource(resPath);
 		assert resURL != null : "Cannot find resource: " + resPath;
 		
 		if (!"file".equals(resURL.getProtocol()))
 			throw new UnsupportedPackageTypeException();
 		
-		Path identifierRealPath;
+		final Path identifierRealPath;
 		try {
 			identifierRealPath = Paths.get(resURL.toURI());
 		} catch (URISyntaxException e) {
@@ -60,13 +61,13 @@ public class DiskPackage implements ResourcePackage, IDiskDirectory, IDiskEntry 
 	@Nullable
 	@Override
 	public IDiskDirectory getParentDirectory () {
-		return this;
+		return null;
 	}
 	
 	@Nonnull
 	@Override
 	public String toString () {
-		return "dir:" + FilesHelper.encode(this.packageRoot.toString());
+		return "dir:" + this.packageRoot;
 	}
 	
 }

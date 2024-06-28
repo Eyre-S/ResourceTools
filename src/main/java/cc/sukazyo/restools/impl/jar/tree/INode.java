@@ -22,7 +22,7 @@ public interface INode {
 	
 	@Nonnull
 	default String[] getPath () {
-		var parent = this.parent();
+		final IBranchNode parent = this.parent();
 		if (parent == null)
 			return new String[]{};
 		else return PathsHelper.join(parent.getPath(), this.getName());
@@ -30,14 +30,19 @@ public interface INode {
 	
 	@Nonnull
 	default String getName () {
-		var parent = this.parent();
+		final IBranchNode parent = this.parent();
 		if (parent == null)
 			return "";
-		else
-			return this.getAbsolutePath().substring(
+		else {
+			final JarEntry entry = this.entry();
+			if (entry == null)
+				throw new IllegalStateException();
+			final String absPath = this.getAbsolutePath();
+			return absPath.substring(
 					parent.getAbsolutePath().length(),
-					this.entry().isDirectory() ? this.getAbsolutePath().length() - 1 : this.getAbsolutePath().length()
+					entry.isDirectory() ? absPath.length() - 1 : absPath.length()
 			);
+		}
 	}
 	
 }

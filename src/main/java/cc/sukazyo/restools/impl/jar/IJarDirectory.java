@@ -46,13 +46,13 @@ public interface IJarDirectory extends ResourceDirectory, IJarEntry {
 	@Nullable
 	@Override
 	default IJarDirectory getParentDirectory () {
-		var parent = this.getNode().parent();
+		IBranchNode parent = this.getNode().parent();
 		if (parent == null)
 			return null;
 		if (parent instanceof NodeRoot)
 			return this.getOwnerPackage();
-		if (parent instanceof NodeDirectoryEntry parentDirNode)
-			return new JarDirectory(this.getOwnerPackage(), parentDirNode);
+		if (parent instanceof NodeDirectoryEntry)
+			return new JarDirectory(this.getOwnerPackage(), (NodeDirectoryEntry)parent);
 		throw new IllegalStateException();
 	}
 	

@@ -8,7 +8,6 @@ import java.nio.file.Path;
 
 public interface IDiskEntry extends ResourceEntry {
 	
-	
 	@Nonnull
 	Path getRealPath ();
 	

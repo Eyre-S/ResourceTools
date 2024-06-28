@@ -18,16 +18,18 @@ public class Parser {
 			
 			IBranchNode parent = root;
 			for (int i = 0; i < entryPath.length - 1; i++) {
-				var maybeParent = parent.getChild(entryPath[i]);
+				final INode maybeParent = parent.getChild(entryPath[i]);
 				if (maybeParent == null)
-					throw new IllegalStateException("Failed to create entry node '%s' due to the parent '%s' cannot be found.".formatted(
+					throw new IllegalStateException(String.format(
+							"Failed to create entry node '%s' due to the parent '%s' cannot be found.",
 							entry.getName(), entryPath[i]
 					));
-				if (maybeParent instanceof IBranchNode parentBranch) {
-					parent = parentBranch;
+				if (maybeParent instanceof IBranchNode) {
+					parent = (IBranchNode)maybeParent;
 					continue;
 				}
-				throw new IllegalStateException("Failed to create entry node '%s' due to the parent '%s' is not a directory node.".formatted(
+				throw new IllegalStateException(String.format(
+						"Failed to create entry node '%s' due to the parent '%s' is not a directory node.",
 						entry.getName(), entryPath[i]
 				));
 			}

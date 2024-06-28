@@ -22,8 +22,8 @@ public class JarPackage implements IJarDirectory, ResourcePackage {
 	public JarPackage (@Nonnull ClassLoader classLoader, @Nonnull String[] identifierFilePath)
 	throws UnsupportedPackageTypeException {
 		
-		final var identifierStringPath = PathsHelper.compile(identifierFilePath);
-		final var identifierUrl = classLoader.getResource(identifierStringPath);
+		final String identifierStringPath = PathsHelper.compile(identifierFilePath);
+		final URL identifierUrl = classLoader.getResource(identifierStringPath);
 		assert identifierUrl != null : "Cannot find resource: " + PathsHelper.compile(identifierFilePath);
 		if (!Objects.equals(identifierUrl.getProtocol(), "jar")) throw new UnsupportedPackageTypeException();
 		

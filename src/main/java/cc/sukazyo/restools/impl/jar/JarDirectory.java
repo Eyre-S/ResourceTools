@@ -2,8 +2,8 @@ package cc.sukazyo.restools.impl.jar;
 
 import cc.sukazyo.restools.ResourceDirectory;
 import cc.sukazyo.restools.impl.jar.tree.IBranchNode;
+import cc.sukazyo.restools.impl.jar.tree.INode;
 import cc.sukazyo.restools.impl.jar.tree.NodeDirectoryEntry;
-import cc.sukazyo.restools.utils.PathsHelper;
 
 import javax.annotation.Nonnull;
 
@@ -21,15 +21,15 @@ public class JarDirectory implements IJarDirectory, ResourceDirectory {
 		this.pack = parent.getOwnerPackage();
 		IBranchNode _parent = parent.getNode();
 		for (int i = 0; i < path.length - 1; i++) {
-			var maybeParent = _parent.getChild(path[i]);
+			final INode maybeParent = _parent.getChild(path[i]);
 			if (maybeParent == null) throw new NullPointerException();
-			if (maybeParent instanceof IBranchNode nowParent)
-				_parent = nowParent;
+			if (maybeParent instanceof IBranchNode)
+				_parent = (IBranchNode)maybeParent;
 			else throw new NullPointerException();
 		}
-		var maybeDirectory = _parent.getChild(path[path.length-1]);
-		if (maybeDirectory instanceof NodeDirectoryEntry nowDirectory)
-			this.entryNode = nowDirectory;
+		final INode maybeDirectory = _parent.getChild(path[path.length-1]);
+		if (maybeDirectory instanceof NodeDirectoryEntry)
+			this.entryNode = (NodeDirectoryEntry)maybeDirectory;
 		else throw new NullPointerException();
 	}
 	
