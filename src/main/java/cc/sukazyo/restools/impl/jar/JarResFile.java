@@ -2,18 +2,14 @@ package cc.sukazyo.restools.impl.jar;
 
 import cc.sukazyo.restools.ResourceDirectory;
 import cc.sukazyo.restools.ResourceFile;
-import cc.sukazyo.restools.impl.jar.tree.IBranchNode;
-import cc.sukazyo.restools.impl.jar.tree.NodeDirectoryEntry;
-import cc.sukazyo.restools.impl.jar.tree.NodeFileEntry;
-import cc.sukazyo.restools.impl.jar.tree.NodeRoot;
-import cc.sukazyo.restools.utils.PathsHelper;
+import cc.sukazyo.restools.impl.jar.tree.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class JarResFile implements ResourceFile {
+public class JarResFile implements ResourceFile, IJarEntry {
 	
 	public final JarPackage pack;
 	public final NodeFileEntry entryNode;
@@ -53,11 +49,11 @@ public class JarResFile implements ResourceFile {
 	
 	@Nonnull
 	@Override
-	public String[] getPath () {
-		return PathsHelper.parseString(this.entryNode.entry().getName());
+	public INode getNode () {
+		return this.entryNode;
 	}
 	
-	@Nullable
+	@Nonnull
 	@Override
 	public ResourceDirectory getParentDirectory () {
 		final var parentNode = this.entryNode.parent();

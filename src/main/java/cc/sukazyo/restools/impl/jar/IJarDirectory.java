@@ -10,11 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
-public interface IJarDirectory extends ResourceDirectory {
-	
-	@Nonnull
-	@Override
-	JarPackage getOwnerPackage ();
+public interface IJarDirectory extends ResourceDirectory, IJarEntry {
 	
 	@Nonnull
 	IBranchNode getNode ();

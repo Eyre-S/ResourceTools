@@ -23,4 +23,8 @@ public interface ResourceFile extends ResourceEntry {
 		return readString(StandardCharsets.UTF_8);
 	}
 	
+	@Nonnull
+	@Override
+	ResourceDirectory getParentDirectory ();
+	
 }

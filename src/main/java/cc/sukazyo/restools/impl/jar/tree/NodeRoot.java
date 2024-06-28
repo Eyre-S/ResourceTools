@@ -41,4 +41,10 @@ public class NodeRoot implements IBranchNode {
 		return _children;
 	}
 	
+	@Nonnull
+	@Override
+	public String getAbsolutePath () {
+		return "";
+	}
+	
 }

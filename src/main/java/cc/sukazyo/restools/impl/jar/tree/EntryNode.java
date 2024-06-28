@@ -16,6 +16,12 @@ public abstract class EntryNode extends AbsNode implements INode {
 	
 	@Nonnull
 	@Override
+	public String getAbsolutePath () {
+		return entry.getName();
+	}
+	
+	@Nonnull
+	@Override
 	public JarEntry entry () {
 		return this.entry;
 	}

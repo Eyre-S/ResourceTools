@@ -62,6 +62,12 @@ public class JarPackage implements IJarDirectory, ResourcePackage {
 		return this.jarNodeRoot;
 	}
 	
+	@Nonnull
+	@Override
+	public String[] getPath () {
+		return ResourcePackage.super.getPath();
+	}
+	
 	@Nullable
 	@Override
 	public IJarDirectory getParentDirectory () {

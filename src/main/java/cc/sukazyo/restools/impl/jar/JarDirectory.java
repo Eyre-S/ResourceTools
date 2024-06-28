@@ -45,10 +45,4 @@ public class JarDirectory implements IJarDirectory, ResourceDirectory {
 		return this.entryNode;
 	}
 	
-	@Nonnull
-	@Override
-	public String[] getPath () {
-		return PathsHelper.parseString(this.entryNode.entry().getName());
-	}
-	
 }

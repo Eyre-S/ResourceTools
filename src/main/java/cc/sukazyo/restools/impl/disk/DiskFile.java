@@ -51,7 +51,7 @@ public class DiskFile implements ResourceFile, IDiskEntry {
 		return this.path;
 	}
 	
-	@Nullable
+	@Nonnull
 	@Override
 	public IDiskDirectory getParentDirectory () {
 		return pack.getDirectory(PathsHelper.dropLast(this.path));
