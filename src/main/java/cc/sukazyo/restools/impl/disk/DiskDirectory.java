@@ -53,6 +53,14 @@ public class DiskDirectory implements IDiskDirectory, IDiskEntry, ResourceDirect
 		);
 	}
 	
+	/**
+	 * When going up levels paths using {@link #DiskDirectory(DiskPackage, Path, String[], int)},
+	 * when the path is empty, then it indicates that the target directory is the top level, aka
+	 * the resource package itself.
+	 * <p>
+	 * When this error occurs in the constructor, you should use {@link IDiskEntry#getOwnerPackage()}
+	 * instead.
+	 */
 	public static class GoUpMeetsTopException extends Exception {
 		@Nonnull public final DiskPackage pack;
 		public GoUpMeetsTopException (@Nonnull DiskPackage pack) {

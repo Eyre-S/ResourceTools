@@ -43,6 +43,7 @@ dependencies {
 	compileOnly 'com.github.spotbugs:spotbugs-annotations:4.8.4'
 	
 	testImplementation platform("org.junit:junit-bom:5.10.3")
+	testImplementation "cc.sukazyo:morny-coeur:1.3.4"
 	
 }
 

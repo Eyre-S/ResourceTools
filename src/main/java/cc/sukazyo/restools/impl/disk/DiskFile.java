@@ -79,7 +79,11 @@ public class DiskFile implements ResourceFile, IDiskEntry {
 	@Nonnull
 	@Override
 	public IDiskDirectory getParentDirectory () {
-		return pack.getDirectory(PathsHelper.dropLast(this.path));
+		try {
+			return new DiskDirectory(this.pack, this.file, this.path, 1);
+		} catch (DiskDirectory.GoUpMeetsTopException e) {
+			return e.pack;
+		}
 	}
 	
 }
