@@ -18,16 +18,38 @@ public class DiskFile implements ResourceFile, IDiskEntry {
 	@Nonnull
 	public final Path file;
 	
-	public DiskFile (@Nonnull DiskPackage pack, @Nonnull Path parent_dir, @Nonnull String[] path) {
+	private DiskFile(@Nonnull DiskPackage pack, @Nonnull String[] path, @Nonnull Path file)
+	throws DiskFileUnavailableException {
 		this.pack = pack;
 		this.path = path;
-		this.file = Paths.get(parent_dir.toString(), path);
+		this.file = file;
+		if (!file.toFile().isFile())
+			throw new DiskFileUnavailableException();
 	}
 	
-	DiskFile (@Nonnull DiskPackage pack, @Nonnull IDiskDirectory parent, @Nonnull File target) {
-		this.pack = pack;
-		this.path = PathsHelper.join(parent.getPath(), target.getName());
-		this.file = target.toPath();
+	DiskFile (@Nonnull DiskPackage pack, @Nonnull Path parent_dir, @Nonnull String[] path)
+	throws DiskFileUnavailableException {
+		this(
+				pack, path,
+				Paths.get(parent_dir.toString(), path)
+		);
+	}
+	
+	/**
+	 * Create a new file based on the parent {@link IDiskDirectory} and the target {@link File}.
+	 *
+	 * @param parent the parent {@link IDiskDirectory} of this file.
+	 * @param target the target {@link File} of this file, should be the one-level file in the
+	 *               parent directory.
+	 * @throws DiskFileUnavailableException if the target file is unavailable.
+	 */
+	DiskFile (@Nonnull IDiskDirectory parent, @Nonnull File target)
+	throws DiskFileUnavailableException {
+		this(
+				parent.getOwnerPackage(),
+				PathsHelper.join(parent.getPath(), target.getName()),
+				target.toPath()
+		);
 	}
 	
 	@Nonnull

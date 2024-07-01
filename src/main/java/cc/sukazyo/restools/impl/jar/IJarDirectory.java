@@ -15,16 +15,24 @@ public interface IJarDirectory extends ResourceDirectory, IJarEntry {
 	@Nonnull
 	IBranchNode getNode ();
 	
-	@Nonnull
+	@Nullable
 	@Override
 	default JarResFile getFile (@Nonnull String... path) {
-		return new JarResFile(this, path);
+		try {
+			return new JarResFile(this, path);
+		} catch (NoSuchEntryException e) {
+			return null;
+		}
 	}
 	
-	@Nonnull
+	@Nullable
 	@Override
 	default JarDirectory getDirectory (@Nonnull String... path) {
-		return new JarDirectory(this, path);
+		try {
+			return new JarDirectory(this, path);
+		} catch (NoSuchEntryException e) {
+			return null;
+		}
 	}
 	
 	@Nonnull

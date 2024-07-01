@@ -19,16 +19,38 @@ public class DiskDirectory implements IDiskDirectory, IDiskEntry, ResourceDirect
 	@Nonnull
 	public final Path directory;
 	
-	public DiskDirectory (@Nonnull DiskPackage pack, @Nonnull Path parent_dir, @Nonnull String[] path) {
+	private DiskDirectory (@Nonnull DiskPackage pack, @Nonnull String[] path, @Nonnull Path directory)
+	throws DiskFileUnavailableException {
 		this.pack = pack;
 		this.path = path;
-		this.directory = Paths.get(parent_dir.toString(), path);
+		this.directory = directory;
+		if (!this.directory.toFile().isDirectory())
+			throw new DiskFileUnavailableException();
 	}
 	
-	DiskDirectory (@Nonnull DiskPackage pack, @Nonnull IDiskDirectory parent, @Nonnull File target) {
-		this.pack = pack;
-		this.path = PathsHelper.join(parent.getPath(), target.getName());
-		this.directory = target.toPath();
+	DiskDirectory (@Nonnull DiskPackage pack, @Nonnull Path parent_dir, @Nonnull String[] path)
+	throws DiskFileUnavailableException {
+		this(
+				pack, path,
+				Paths.get(parent_dir.toString(), path)
+		);
+	}
+	
+	/**
+	 * Create a new directory based on the parent {@link IDiskDirectory} and the target {@link File}.
+	 *
+	 * @param parent the parent {@link IDiskDirectory} of this file.
+	 * @param target the target {@link File} of this directory, should be the one-level child
+	 *               directory in the parent directory.
+	 * @throws DiskFileUnavailableException if the target file is unavailable.
+	 */
+	DiskDirectory (@Nonnull IDiskDirectory parent, @Nonnull File target)
+	throws DiskFileUnavailableException {
+		this(
+				parent.getOwnerPackage(),
+				PathsHelper.join(parent.getPath(), target.getName()),
+				target.toPath()
+		);
 	}
 	
 	public static class GoUpMeetsTopException extends Exception {

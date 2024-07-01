@@ -18,20 +18,20 @@ public class JarResFile implements ResourceFile, IJarEntry {
 		this.entryNode = entryNode;
 	}
 	
-	JarResFile (@Nonnull IJarDirectory parent, String[] path) {
+	JarResFile (@Nonnull IJarDirectory parent, String[] path) throws NoSuchEntryException {
 		this.pack = parent.getOwnerPackage();
 		IBranchNode _parent = parent.getNode();
 		for (int i = 0; i < path.length - 1; i++) {
 			INode maybeParent = _parent.getChild(path[i]);
-			if (maybeParent == null) throw new NullPointerException();
+			if (maybeParent == null) throw new NoSuchEntryException();
 			if (maybeParent instanceof IBranchNode)
 				_parent = (IBranchNode)maybeParent;
-			else throw new NullPointerException();
+			else throw new NoSuchEntryException();
 		}
 		final INode maybeFile = _parent.getChild(path[path.length-1]);
 		if (maybeFile instanceof NodeFileEntry)
 			this.entryNode = (NodeFileEntry)maybeFile;
-		else throw new NullPointerException();
+		else throw new NoSuchEntryException();
 	}
 	
 	@Nonnull
