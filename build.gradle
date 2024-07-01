@@ -79,12 +79,6 @@ publishing {
 			artifactId = proj_package_name
 			from components.java
 		}
-		if (proj_is_snapshot)
-			snapshot (MavenPublication) {
-				artifactId = proj_package_name
-				from components.java
-				version "0.0.0-SNAPSHOT"
-			}
 	}
 	
 	repositories {
