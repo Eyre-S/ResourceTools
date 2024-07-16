@@ -53,8 +53,8 @@ public class DiskDirectory implements IDiskDirectory, IDiskEntry, ResourceDirect
 		);
 	}
 	
-	/*
-	 * When going up levels paths using {@link #DiskDirectory(DiskPackage, Path, String[], int)},
+	/**
+	 * When going up levels paths using {@link DiskDirectory#DiskDirectory(DiskPackage, Path, String[], int)},
 	 * when the path is empty, then it indicates that the target directory is the top level, aka
 	 * the resource package itself.
 	 * <p>

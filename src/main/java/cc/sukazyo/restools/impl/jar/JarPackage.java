@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Objects;
 import java.util.jar.JarFile;
@@ -29,8 +30,7 @@ public class JarPackage implements IJarDirectory, ResourcePackage {
 		
 		try {
 			this.jar = new JarFile(new File(
-					new URL(PathsHelper.getJarPath(identifierUrl.toString()))
-							.getPath()
+					URI.create(PathsHelper.getJarPath(identifierUrl.toString()))
 			));
 		} catch (IOException e) {
 			throw new IllegalStateException("Failed to read jar file of the request resource " + identifierStringPath + ".", e);
