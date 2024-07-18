@@ -27,8 +27,13 @@ public class Parser {
 			
 			final List<JarEntry> newUnresolvedEntries = new ArrayList<>();
 			unresolvedEntries.forEach(entry -> resolveEntry(root, entry, newUnresolvedEntries));
-			if (unresolvedEntries.size() == newUnresolvedEntries.size())
-				throw new IllegalStateException("Failed to resolve all entries due to thw following entries have no parents: " + unresolvedEntries);
+			if (unresolvedEntries.size() == newUnresolvedEntries.size()) {
+//				throw new IllegalStateException("Failed to resolve all entries due to thw following entries have no parents: " + unresolvedEntries);
+				for (JarEntry entry : newUnresolvedEntries) {
+					root._dangling_entries.put(entry.getName(), entry);
+				}
+				break;
+			}
 			unresolvedEntries = newUnresolvedEntries;
 			
 		}

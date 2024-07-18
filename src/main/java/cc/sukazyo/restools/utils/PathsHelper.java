@@ -32,7 +32,7 @@ public class PathsHelper {
 	 */
 	@Nonnull
 	public static String getJarPath (@Nonnull String path) {
-		final int jarIdentifier = path.lastIndexOf("/") - 1;
+		final int jarIdentifier = path.lastIndexOf("!/");
 		if (jarIdentifier > 0 && path.startsWith("jar:"))
 			return path.substring("jar:".length(), jarIdentifier);
 		else return path;

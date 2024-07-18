@@ -12,6 +12,7 @@ public class NodeRoot implements IBranchNode {
 	@Nonnull
 	public final JarFile jar;
 	final Map<String, EntryNode> _children = new HashMap<>();
+	final Map<String, JarEntry> _dangling_entries = new HashMap<>();
 	
 	public NodeRoot (@Nonnull JarFile jar) {
 		this.jar = jar;
@@ -39,6 +40,11 @@ public class NodeRoot implements IBranchNode {
 	@Override
 	public Map<String, EntryNode> children () {
 		return _children;
+	}
+	
+	@Nonnull
+	public Map<String, JarEntry> getDanglingEntries () {
+		return _dangling_entries;
 	}
 	
 	@Nonnull
