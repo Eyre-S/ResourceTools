@@ -2,6 +2,7 @@ package cc.sukazyo.restools;
 
 import cc.sukazyo.restools.impl.disk.DiskPackage;
 import cc.sukazyo.restools.impl.jar.JarPackage;
+import cc.sukazyo.restools.utils.PathsHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,16 +33,41 @@ public interface ResourcePackage extends ResourceDirectory, ResourceEntry {
 	 * @return A {@link ResourcePackage} that contains the resource.
 	 * @throws UnsupportedPackageTypeException If the resource location cannot be read by any
 	 *                                         of the known implementations.
+	 * @throws NoSuchResourceException If the identifierFilePath is not exists (either directory
+	 *                                 or file) in classloader's all the classpath.
 	 *
 	 * @since 0.3.0
 	 */
-	static ResourcePackage get (@Nonnull ClassLoader classLoader, @Nonnull String... identifierFilePath) throws UnsupportedPackageTypeException {
+	static ResourcePackage get (@Nonnull ClassLoader classLoader, @Nonnull String... identifierFilePath)
+	throws UnsupportedPackageTypeException, NoSuchResourceException {
 		
 		try { return new DiskPackage(classLoader, identifierFilePath); } catch (UnsupportedPackageTypeException ignored) {}
 		try { return new JarPackage(classLoader, identifierFilePath); } catch (UnsupportedPackageTypeException ignored) {}
 		
 		throw new UnsupportedPackageTypeException();
 		
+	}
+	
+	/**
+	 * Get a resource package.
+	 * <p>
+	 * Different with the v0.2.x and older, the ResourcePackage always locates in the root of the
+	 * classpath, instead of the old behavior of the v0.2.x, which locates in the given path.
+	 *
+	 * @param classLoader the {@link ClassLoader} that is used to load the resource.
+	 * @param identifierFilePath Path of a resource, used to locate a resource package. The path
+	 *                           will be parsed to an array using {@link PathsHelper#parseString(String)}.
+	 * @return A {@link ResourcePackage} that contains the resource.
+	 * @throws UnsupportedPackageTypeException If the resource location cannot be read by any
+	 *                                         of the known implementations.
+	 * @throws NoSuchResourceException If the identifierFilePath is not exists (either directory
+	 *                                 or file) in classloader's all the classpath.
+	 *
+	 * @since 0.3.0
+	 */
+	static ResourcePackage get (@Nonnull ClassLoader classLoader, @Nonnull String identifierFilePath)
+	throws UnsupportedPackageTypeException, NoSuchResourceException {
+		return get(classLoader, PathsHelper.parseString(identifierFilePath));
 	}
 	
 	/**
@@ -54,8 +80,24 @@ public interface ResourcePackage extends ResourceDirectory, ResourceEntry {
 	 *
 	 * @since 0.3.0
 	 */
-	static ResourcePackage get (@Nonnull String... identifierFilePath) throws UnsupportedPackageTypeException {
+	static ResourcePackage get (@Nonnull String... identifierFilePath)
+	throws UnsupportedPackageTypeException, NoSuchResourceException {
 		return get(Thread.currentThread().getContextClassLoader(), identifierFilePath);
+	}
+	
+	/**
+	 * Get the resource package using the current thread's {@link ClassLoader}.
+	 * <p>
+	 * This is an alias of {@link #get(ClassLoader, String)}, in most cases where there's no
+	 * custom classloader, this method is enough to work.
+	 *
+	 * @see #get(ClassLoader, String)
+	 *
+	 * @since 0.3.0
+	 */
+	static ResourcePackage get (@Nonnull String identifierFilePath)
+	throws UnsupportedPackageTypeException, NoSuchResourceException {
+		return get(PathsHelper.parseString(identifierFilePath));
 	}
 	
 	/**

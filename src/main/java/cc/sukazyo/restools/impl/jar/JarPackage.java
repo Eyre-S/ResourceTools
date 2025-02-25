@@ -1,5 +1,6 @@
 package cc.sukazyo.restools.impl.jar;
 
+import cc.sukazyo.restools.NoSuchResourceException;
 import cc.sukazyo.restools.ResourcePackage;
 import cc.sukazyo.restools.impl.jar.tree.IBranchNode;
 import cc.sukazyo.restools.impl.jar.tree.NodeRoot;
@@ -21,11 +22,13 @@ public class JarPackage implements IJarDirectory, ResourcePackage {
 	public final NodeRoot jarNodeRoot;
 	
 	public JarPackage (@Nonnull ClassLoader classLoader, @Nonnull String[] identifierFilePath)
-	throws UnsupportedPackageTypeException {
+	throws UnsupportedPackageTypeException, NoSuchResourceException {
 		
 		final String identifierStringPath = PathsHelper.compile(identifierFilePath);
 		final URL identifierUrl = classLoader.getResource(identifierStringPath);
-		assert identifierUrl != null : "Cannot find resource: " + PathsHelper.compile(identifierFilePath);
+		if (identifierUrl == null)
+			throw new NoSuchResourceException(classLoader, identifierStringPath);
+		
 		if (!Objects.equals(identifierUrl.getProtocol(), "jar")) throw new UnsupportedPackageTypeException();
 		
 		try {

@@ -1,5 +1,6 @@
 package cc.sukazyo.restools.impl.disk;
 
+import cc.sukazyo.restools.NoSuchResourceException;
 import cc.sukazyo.restools.ResourcePackage;
 import cc.sukazyo.restools.utils.PathsHelper;
 
@@ -16,12 +17,13 @@ public class DiskPackage implements ResourcePackage, IDiskDirectory, IDiskEntry 
 	public final Path packageRoot;
 	
 	public DiskPackage (@Nonnull ClassLoader classLoader, @Nonnull String[] identifierFilePath)
-	throws UnsupportedPackageTypeException {
+	throws UnsupportedPackageTypeException, NoSuchResourceException {
 		
 		final String resPath = PathsHelper.compile(identifierFilePath);
 		final int resLevel = identifierFilePath.length;
 		final URL resURL = classLoader.getResource(resPath);
-		assert resURL != null : "Cannot find resource: " + resPath;
+		if (resURL == null)
+			throw new NoSuchResourceException(classLoader, resPath);
 		
 		if (!"file".equals(resURL.getProtocol()))
 			throw new UnsupportedPackageTypeException();
@@ -32,6 +34,7 @@ public class DiskPackage implements ResourcePackage, IDiskDirectory, IDiskEntry 
 		} catch (URISyntaxException e) {
 			throw new IllegalStateException("Cannot get the root dir of the required resource " + resPath + ".", e);
 		}
+		
 		this.packageRoot = PathsHelper.getParent(identifierRealPath, resLevel);
 		
 	}
