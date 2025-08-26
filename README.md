@@ -17,22 +17,21 @@ A tool lib for easily getting the resources in your classpath (dir or jar)!
 
 ---
 
-#### NOTICE
-v0.3.x has VERY BIG differences with the v0.2.x.
-
----
-
 <br/>
 
 ## Introduction
 
-ResourceTools is a project that allows developers, especially new Java developers, to no longer have the problem of getting resource files with full of problems in Java.
+ResourceTools is a project that allows JVM based programs, to no longer have the problem of getting resource files with full of problems in Java.
 
 Through this toolkit, you can use `resources/` in your classpath just like using `java.io.File` in disk. Whether before or after packaging, you can always get resources with a piece of code.
 
 ## Usage
 
 See [Wiki](https://github.com/Eyre-S/ResourceTools/wiki).
+
+### INCOMPATIBLE CHANGES
+
+**From 0.2.x to 0.3.x**, a huge amount of APIs has changed. Read the doc to upgrade your usage.
 
 ## License & Contribute
 
