@@ -49,8 +49,10 @@ public class Parser {
 		IBranchNode parent = root;
 		for (int i = 0; i < entryPath.length - 1; i++) {
 			final INode maybeParent = parent.getChild(entryPath[i]);
-			if (maybeParent == null)
+			if (maybeParent == null) {
 				unresolvedStack.add(entry);
+				return;
+			}
 			else if (maybeParent instanceof IBranchNode)
 				parent = (IBranchNode)maybeParent;
 			else {

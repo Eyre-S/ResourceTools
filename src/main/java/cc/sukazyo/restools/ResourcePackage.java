@@ -6,6 +6,7 @@ import cc.sukazyo.restools.utils.PathsHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.net.URI;
 
 /**
  * A resource package is a classpath location that contains variables of resources.
@@ -38,6 +39,7 @@ public interface ResourcePackage extends ResourceDirectory, ResourceEntry {
 	 *
 	 * @since 0.3.0
 	 */
+	@Nonnull
 	static ResourcePackage get (@Nonnull ClassLoader classLoader, @Nonnull String... identifierFilePath)
 	throws UnsupportedPackageTypeException, NoSuchResourceException {
 		
@@ -65,6 +67,7 @@ public interface ResourcePackage extends ResourceDirectory, ResourceEntry {
 	 *
 	 * @since 0.3.0
 	 */
+	@Nonnull
 	static ResourcePackage get (@Nonnull ClassLoader classLoader, @Nonnull String identifierFilePath)
 	throws UnsupportedPackageTypeException, NoSuchResourceException {
 		return get(classLoader, PathsHelper.parseString(identifierFilePath));
@@ -80,6 +83,7 @@ public interface ResourcePackage extends ResourceDirectory, ResourceEntry {
 	 *
 	 * @since 0.3.0
 	 */
+	@Nonnull
 	static ResourcePackage get (@Nonnull String... identifierFilePath)
 	throws UnsupportedPackageTypeException, NoSuchResourceException {
 		return get(Thread.currentThread().getContextClassLoader(), identifierFilePath);
@@ -95,9 +99,21 @@ public interface ResourcePackage extends ResourceDirectory, ResourceEntry {
 	 *
 	 * @since 0.3.0
 	 */
+	@Nonnull
 	static ResourcePackage get (@Nonnull String identifierFilePath)
 	throws UnsupportedPackageTypeException, NoSuchResourceException {
 		return get(PathsHelper.parseString(identifierFilePath));
+	}
+	
+	@Nonnull
+	static ResourcePackage fromURI (@Nonnull URI uri)
+	throws UnsupportedPackageTypeException {
+		
+		try { return new DiskPackage(uri); } catch (UnsupportedPackageTypeException ignored) {}
+		try { return new JarPackage(uri); } catch (UnsupportedPackageTypeException ignored) {}
+		
+		throw new UnsupportedPackageTypeException();
+		
 	}
 	
 	/**

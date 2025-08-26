@@ -6,6 +6,7 @@ import cc.sukazyo.restools.utils.PathsHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -36,6 +37,28 @@ public class DiskPackage implements ResourcePackage, IDiskDirectory, IDiskEntry 
 		}
 		
 		this.packageRoot = PathsHelper.getParent(identifierRealPath, resLevel);
+		
+	}
+	
+	public DiskPackage (@Nonnull URI uri) throws UnsupportedPackageTypeException {
+		
+		if (!uri.getScheme().equals("file"))
+			throw new UnsupportedPackageTypeException();
+		
+		try {
+			
+			Path identifierRealPath = Paths.get(uri);
+			
+			if (identifierRealPath.toFile().isDirectory())
+				this.packageRoot = identifierRealPath;
+			else
+				throw new UnsupportedPackageTypeException();
+			
+		} catch (UnsupportedPackageTypeException pass) {
+			throw pass;
+		} catch (Exception e) {
+			throw new IllegalStateException("Cannot open filepath: " + uri, e);
+		}
 		
 	}
 	

@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.jar.JarFile;
 
@@ -42,6 +44,32 @@ public class JarPackage implements IJarDirectory, ResourcePackage {
 		this.jarNodeRoot = Parser.parse(this.jar);
 		
 	}
+	
+	public JarPackage (@Nonnull URI uri) throws UnsupportedPackageTypeException {
+		
+		if (!uri.getScheme().equals("file"))
+			throw new UnsupportedPackageTypeException();
+		
+		try {
+			
+			Path jarPath = Paths.get(uri);
+			File jarFile = jarPath.toFile();
+			
+			if (jarFile.isFile() && jarFile.getName().endsWith(".jar")) {
+				
+				this.jar = new JarFile(jarFile);
+				this.jarNodeRoot = Parser.parse(this.jar);
+				
+			} else throw new UnsupportedPackageTypeException();
+			
+		} catch (UnsupportedPackageTypeException pass) {
+			throw pass;
+		} catch (Exception e) {
+			throw ((UnsupportedPackageTypeException) new UnsupportedPackageTypeException().initCause(e));
+		}
+		
+	}
+	
 	
 	@Override
 	public boolean isInDirectory () {
